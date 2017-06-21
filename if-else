@@ -1,0 +1,40 @@
+####################
+#####if-else##########
+
+##################
+if [ Test-Bedingung ]
+  then
+    Befehl...
+fi
+
+##################
+if [ Test-Bedingung ]
+  then
+    echo "Ok, alles in Ordnung."
+  else
+    echo "Ahrg...Fehler."
+fi
+
+##################
+if [ Test-Bedingung ]
+  then
+    Befehl...
+  elif [ Test-Bedingung ]
+    then
+      Befehl...
+  else
+    Befehl...
+fi
+
+###################
+#!/bin/bash
+echo "Wie ist Ihr Name?"
+read ANTWORT
+if [ "$ANTWORT" == "root" ]
+    then
+        echo "Hallo, Administrator."
+    else
+        echo "Hallo, Anwender."
+fi
+
+####################
