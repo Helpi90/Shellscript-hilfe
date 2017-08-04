@@ -5,7 +5,7 @@
 alias ll='ls -lF'
 alias la='ls -aF'
 alias lla='ls -laF'
-alias l='ls -CF'
+
 alias ld='ls -al -d * | egrep "^d"' # only subdirectories
 alias lt='ls -alt | head -20' # recently changed files
 alias ag="alias | $grep"
@@ -88,6 +88,16 @@ alias update="sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dis
 # Reboot
 alias reboot="sudo reboot"
 
+# Docker
+
+alias ds='sudo docker start'
+alias dt='sudo docker stop'
+alias dps='sudo docker ps'
+alias da='sudo docker attach'
+alias di='sudo docker inspect'
+
+# Git
+
 alias gs='git status '
 alias ga='git add '
 alias gb='git branch '
@@ -101,4 +111,9 @@ alias gp="git pull"
 alias logoh="tail -f /var/log/openhab2/openhab.log -f /var/log/openhab2/events.log"
 
 alias lszeigen="ls -lh" # Dateien + Rechte + Größe
+alias l='ls -lah'
 alias tarzeigen="tar -ztvf"
+
+alias aliases='cat ~/.bash_aliases'
+
+alias cpall="find . -type f -print0 | xargs -0 -I%%% cp %%% "  ##ORDNER_MIT_ALLEN_DATEIEN
