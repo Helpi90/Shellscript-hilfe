@@ -53,3 +53,63 @@ alias borg_info="sudo borg info" # borg info /pfad/zum/repo::ARCHIV
 
 # Zip
 alias makezip="/usr/bin/zip -rq "  # /usr/bin/zip -rq /backup/test_`date "+%Y-%m-%d"`.zip ./
+mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
+skript () { touch $1.sh && chmod +x $1.sh && nano $1.sh; }     # skript         Erstellt eine Datei, führt chmod +x aus und öffnet nano
+
+# 'easy extract'
+extract () {
+  if [ -f "$1" ] ; then
+  case $1 in
+    *.tar.bz2)   tar xjf "$1"     ;;
+    *.tar.gz)    tar xzf "$1"     ;;
+    *.bz2)       bunzip2 "$1"     ;;
+    *.rar)       unrar e "$1"     ;;
+    *.gz)        gunzip "$1"      ;;
+    *.tar)       tar xf "$1"      ;;
+    *.tbz2)      tar xjf "$1"     ;;
+    *.tgz)       tar xzf "$1"     ;;
+    *.zip)       unzip "$1"       ;;
+    *.Z)         uncompress "$1"  ;;
+    *.7z)        7z x "$1"        ;;
+    *)     echo "'$1' cannot be extracted via extract()" ;;
+  esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+function syslog() {
+  tail -f /var/log/system.log
+}
+
+# checks port number to see what service is attached
+function port2service() {
+  lsof -i -P | grep "$1"
+}
+
+#alias grep='grep --color=auto -in'
+
+# get rid of command not found
+alias cd..='cd ..'
+
+# a quick way to get out of current directory
+alias ..='cd ..'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+
+# show hidden files only
+alias ls.='ls -d .* --color=auto'
+
+# show extra options
+alias dir='ls -alv'
+
+# go to directory and execute 'ls'
+function cdl() {
+    if [ "$*" = "" ]
+    then
+        cd
+    else
+        cd "$*";
+    fi
+        dir;
+}
