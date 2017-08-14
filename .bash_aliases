@@ -2,6 +2,7 @@
 alias ..='cd ../'
 alias ...='cd ../../'
 alias ....='cd ../../../'
+alias .....='cd ../../../..'
 alias gohome="cd ~"
 alias helpi="cd /home/helpi"
 alias pi="cd /home/pi"
