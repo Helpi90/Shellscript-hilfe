@@ -27,3 +27,11 @@ $ echo ${h-$r}	Gibt hoch aus, da die Variable h belegt ist. Ansonsten würde der
 $ echo ${tmp-`date`}	Gibt das aktuelle Datum aus, wenn die Variable tmp nicht gesetzt ist. (Der Befehl date gibt das Datum zurück)
 $ echo ${l=$r}	Gibt runter aus, da die Variable l keinen Wert enthält. Gleichzeitig wird l der Wert von r zugewiesen.
 $ echo $l	Gibt runter aus, da l jetzt den gleichen Inhalt hat wie r.
+#################################
+##### Uptime
+#################################
+UP0=`cut -d. -f1 /proc/uptime`
+UP1=$(($UP0/86400))             # Tage
+UP2=$(($UP0/3600%24))           # Stunden
+UP3=$(($UP0/60%60))             # Minuten
+UP4=$(($UP0%60))                # Sekunden

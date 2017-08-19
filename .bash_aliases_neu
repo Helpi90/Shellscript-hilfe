@@ -26,6 +26,7 @@ alias get='git '
 #######################################
 alias update="sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt-get autoclean && sudo apt-get clean && sudo apt-get autoremove -y "
 alias auto='sudo apt-get autoremove'
+alias pi-up="sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo rpi-update && sudo apt-get autoclean && sudo apt-get autoremove -y"
 # edit this file
 alias editbash="nano $HOME/.bash_aliases"
 # if user is not root, pass all commands via sudo #
@@ -124,6 +125,8 @@ alias egrep='egrep --color=auto'
 ##	System	     ##
 #######################################
 alias exe='chmod +x'
+alias chowncr='sudo chown -cR $USER:$USER $1'
+alias chmod='chmod --preserve-root'
 alias gping='ping google.com -c 1'
 #copy and go to dir
 cpg (){
@@ -149,7 +152,7 @@ alias rd="rmdir"
 alias remac='ifdown wlan0 && sleep 3 && macchanger -r wlan0 && sleep 3 && ifup wlan0'
 
 alias path='echo -e ${PATH//:/\\n}'
-alias now='date +"%T'
+alias now='date +"%T"'
 alias nowtime=now
 alias nowdate='date +"%d-%m-%Y"'
 #######################################
@@ -274,3 +277,10 @@ function aptu { sudo apt-get update $1 $2 $3 $4 $5 $6 $7 $8 $9 ;}
 # Wed Feb 24 21:51:53 GST 2016
 # updates
 function aptuu { sudo aptitude update $1 $2 $3 $4 $5 $6 $7 $8 $9 ;}
+#######################################
+##	NEU 15.08.17	     ##
+#######################################
+#Back Up and date
+function bkdate() {
+  cp $1 $1.`date +%Y%m%d`;
+}
