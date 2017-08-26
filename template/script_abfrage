@@ -1,0 +1,92 @@
+new_script Version 3
+The most popular script on the old version of LinuxCommand.org was new_script, a bash shell script that created bash shell scripts. That is, a script template generator. A few months ago I rewrote new_script to modernize it and make better use of bash features, including arrays. The new version is less than half the length of the previous version and yet it does more.
+
+Using new_script will save you a lot of work by creating a customized template incorporating a parser for your script's command-line options and arguments. The template also includes a number of useful housekeeping routines such as error and signal handlers. The generated script is fully functional (though it does nothing) and is ready for you to insert your program-specific logic.
+
+Synopsis
+
+new_script [-h|--help] [-q|--quiet] [-s|--root] [script]
+
+Description
+
+new_script will, by default, prompt the user for details about the script to be generated:
+
+Enter script output filename >
+
+Choose a name for the generated script file.
+
+Enter purpose of script >
+
+Enter a one-line description of the script.
+
+Include GPL license header [y/n]? >
+
+Entering "y" will insert a GPL license header into the comment block at the beginning of the script.
+
+Does this script require superuser privileges [y/n]? >
+
+Entering "y" will insert a routine that verifies the user has superuser privileges before allowing the script to execute.
+
+Does this script support command-line options [y/n]? >
+
+If you intend to support command-line options for your script, answer "y".
+
+Option 1:
+Enter option letter [a-z] (Enter to end) >
+
+If command line options are desired, a series of prompts will appear. First, you will be asked for the short (single letter) form of the option. Enter a letter in the range of a-z to define the option or enter nothing to end the option input loop.
+
+Description of option ------------------->
+
+Enter a short description of the option. This will be used in the "help" message.
+
+Enter long alternate name (optional) ---->
+
+Enter a single-word long option name if desired. For example, if you have an option "h" for a help function, you can specify an alternate long form name for the option such as "help." When your script is executed, you can invoke the help function by including either -h or --help on the command-line.
+
+Note that new_script always includes the "h" and "help" options automatically by default.
+
+Enter option argument (if any) ---------->
+
+If your option requires an argument, enter a single-word descriptor here. For example, if you were creating a script named my_script supporting both an input and an output file, you might have an option for each with their corresponding arguments such as:
+
+my_script -i infile -o outfile
+
+After you finish entering your option information, new_script will generate your custom script template.
+
+Your script will contain a handy error handling routine called error_exit, which is used like this:
+
+error_exit error_message
+
+where error_message is a string containing a descriptive error message. The error_exit function outputs the error_message string to standard error, calls the clean_up function to perform any necessary housekeeping, then exits with an exit status of 1. Here is an example:
+
+error_exit "Something bad happened!"
+
+You can see other examples within the new_script code itself.
+
+Options
+
+The new_script program supports the following command-line options:
+
+-h, --help
+Display a help message and exit.
+
+-q, --quiet
+Quiet mode. Do not prompt user for script information and output default script to standard output.
+
+-s, --root
+Require superuser privileges for execution of generated script.
+
+You may also include the desired file name for the generated script on the command-line after any specified options.
+
+Installation
+
+You can find the script here. To install it, just highlight the text and copy it into a text editor and save the resulting file. If you're feeling clever, you can directly write it to a file via the command-line. Highlight the text as before, open a terminal and enter the following command (assuming you have a bin directory in your home directory, otherwise adjust as needed):
+
+cat > ~/bin/new_script
+
+Paste the script into the terminal by clicking the middle mouse button and type Ctrl-d.
+
+Once you have written the script, give it execute permissions like so:
+
+chmod +x ~/bin/new_script
