@@ -1,0 +1,11 @@
+################################
+#####Commandos Shellscript#######
+###############################
+#
+expr 8 / 2	#expr = Rechnen in der Shell
+= 4
+#
+set -x 		#Debug Modus an
+set +x		#Debug Modus aus
+#
+2>/dev/null 	# Fehlerausgabe in Datengrab
