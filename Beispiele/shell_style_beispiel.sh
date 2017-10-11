@@ -6,7 +6,7 @@
 #     CREATED:                      2017-09-21
 #
 #     MODIFIED BY:                macbook
-#     MODIFIED DATE:           2017-09-21
+#     MODIFIED DATE:           2017-10-09
 #
 #     DESCRIPTION:               "Beschreibung"
 #
@@ -18,7 +18,7 @@ start_date=`date +%Y-%m-%d` # sets date for vacation message in proper formate
 end_date=`date -v+90d +%Y-%m-%d` #adds 90 days to todays date for vacation message
 newuser(){
    echo "     gApps Admin"
-  read -p "Enter email address to admin: " email
+   read -p "Enter email address to admin: " email
     if [[ -z $email ]];
       then echo "Please enter an email address to proceed";
       read -p "Enter email address to admin: " email
