@@ -1,0 +1,15 @@
+#Variablen für Shellscripte
+
+#Datum (Jahr-Monat-Tag)
+
+date=$(date +%F)
+
+#File Archive Server + Datum
+
+server="192.168.2.125"
+oder
+server="Hostname"
+
+file_archive="$server-$date"
+
+= "10.10.10.1-2017-05-21"
