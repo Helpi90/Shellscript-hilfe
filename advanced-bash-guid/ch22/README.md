@@ -1,0 +1,1 @@
+22-1. Running a script in restricted mode
