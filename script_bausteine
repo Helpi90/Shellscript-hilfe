@@ -1,0 +1,175 @@
+#########################################
+#	Script-Bausteine	#
+#########################################
+#########################################
+#	Abfrage Name	#
+#########################################
+#!/bin/bash
+
+read -p "Ihre Eingabe: " var_name
+
+echo "Die Eingabe lautetet: $var_name"
+
+if [[ $var_name = "q" ]]
+then
+	echo " Ist ein prima q"
+elif [[ $var_name = "m" ]]
+then
+	echo "Jo, ein m"
+else
+	echo "Irgendwas anderes"
+fi
+#########################################
+#	Schleife	#
+#########################################
+#!/bin/bash
+
+while [[ $eingabe -ne 1 ]]
+do
+		read -p "Eingabe: " eingabe
+		echo $eingabe
+done
+#########################################
+#	Abfrage	#
+#########################################
+#!/bin/bash
+if [[ $1 ]]; then
+	abfrage=$1
+else
+	read -p "Ihre Eingabe: " abfrage
+	while [[ $abfrage != 'q' ]] && [[ ! -e $abfrage ]]
+	do
+		read -p "Ihre Eingabe: " abfrage
+		echo "Die Eingabe lautet: $abfrage"
+	done
+
+
+fi
+
+if [[ -e $abfrage ]]
+then
+	echo "Der Eintrag ist vorhanden: $abfrage"
+else
+	echo "Die Datei ist nicht vorhanden!"
+fi
+#########################################
+#	for	#
+#########################################
+#!/usr/bin/env bash
+# Example for loop
+
+echo 'for loop: list-style syntax'
+for f in file1 file2 file3; do
+	echo "Current file: $f"
+done
+#########################################
+#	while	#
+#########################################
+#!/usr/bin/env bash
+# Example while and until blocks
+
+while date; do
+	sleep 1
+done
+
+COUNT=10
+until [[ $COUNT -eq 0 ]]; do
+	date
+	sleep 1
+	(( COUNT-- ))
+done
+#########################################
+#	Case	#
+#########################################
+#!/usr/bin/env bash
+# Example of case-statement usage
+
+language=$1
+
+case $language in
+en|english|55) echo "Hello World" ;;
+fr) echo "Allo Monde" ;;
+es) echo "Hola Mundo" ;;
+*) echo "I don't understand you..." ;;
+esac
+#########################################
+#	Code-backup	#
+#########################################
+#!/bin/sh
+#
+# CodeBackup Script by Piper ## www.binpipe.com
+#LEGEND
+# dirs_to_backup     : Space delimited list of directories to backup.
+# 				       If multiple directories are listed use quotes around the argument.
+# backup_store_dir : The directory to save files to.
+# [key] 			 : An optional parameter (hostname is used if not specified) that is
+#     		           used to name the backup files.  Particularly necessary if you have
+#     		           multiple computers backing up to the same dump_to path.
+#USAGE
+# 					   codebackup.sh dirs_to_backup dump_to [key]
+if [ $# -lt 3 ]
+then
+   echo "usage: codebackup.sh dirs_to_backup dump_to [key]"
+   exit;
+fi
+
+COMPUTER=`hostname`
+
+if [ $# -gt 3 ]
+then
+   COMPUTER=$3
+fi
+
+DIRECTORIES=$1
+BACKUPDIR=$2
+TAR=/bin/tar		    # name and location of tar command
+CONFIGS=/etc			# name and location of config directories you wish to backup
+
+PATH=/usr/local/bin:/usr/bin:/bin
+DOW=`date +%a`              # Day of the week e.g. Mon
+DOM=`date +%d`              # Date of the Month e.g. 27
+DM=`date +%d%b`             # Date and Month e.g. 27Sep
+MOY=`date +%b_%Y`			# Month of Year e.g. Jun_2012
+DAT=`date +%d%b%Y`          # Date
+
+#########--What the Script Does--########
+# On the 1st of the month a full backup is made and kept in a separate folder.
+# Every Sunday a full backup for the config directory like /etc
+# The rest of the time a daily backup is made. All files older than 10 days are deleted. Monthly snapshots older that 6 months are deleted.
+#Cron example: 30 21 * * *	codebackup.sh /var/www/vhosts/dynamiclevels.com /backup DL-Codebase
+#
+if [ $DOM = "01" ]; then  # monthly snapshots full backup in a separate directory
+	mkdir $BACKUPDIR/$MOY
+	$TAR -czf $BACKUPDIR/$MOY/$COMPUTER-$DM-Archive.tgz $DIRECTORIES
+fi
+
+if [ $DOW = "Sun" ]; then # weekly full backup of configs
+
+	$TAR -z -c -f $BACKUPDIR/$COMPUTER-$DAT-CONFIGS.tgz $CONFIGS
+
+else    # make Daily backup & Remove Files Older than 10 days
+
+	$TAR -z -c -f $BACKUPDIR/$COMPUTER-$DAT.tgz $DIRECTORIES
+	find $BACKUPDIR/*.tgz -mtime +9 -exec rm {} \;
+fi
+
+# Also Remove Anything older than 6 months#
+find $BACKUPDIR/ -amin +259200 -exec /bin/rm -rf {} \;
+#########################################
+#	LOG	#
+#########################################
+#!/bin/bash
+
+if [ -z "$DOTFILES_LOG_FILE" ]; then
+    readonly DOTFILES_LOG_FILE="${DOTFILES_LOG_FILE:-${DOTFILES_HOME}/logs/${0//*dotfiles\//}}"
+    [ ! -d "$(dirname "$DOTFILES_LOG_FILE")" ] && mkdir -p "$(dirname "$DOTFILES_LOG_FILE")"
+fi
+
+_log() {
+    echo "[$(date +'%Y-%m-%d %T.%N')] $1: $2" | tee -a "$DOTFILES_LOG_FILE" >&2
+}
+
+info ()    { _log "INFO"    "$*"; }
+warning () { _log "WARNING" "$*"; }
+error ()   { _log "ERROR"   "$*"; }
+fatal ()   { _log "FATAL"   "$*"; exit 1; }

@@ -1,0 +1,176 @@
+# IP
+ip -4 a												# Gibt die eigenen IPv4 Adressen zu jedem Adapter aus
+ip -6 a												# Gibt die eigenen IPv6 Adressen zu jedem Adapter aus
+ip -4 r												# Gibt IPv4 Routen aus
+ip -6 r												# Gibt IPv6 Routen aus
+ip -4 n s											# Gibt die nächsten Nachbarn im IPv4 Bereich aus
+ip -6 n s											# Gibt die nächsten Nachbarn im IPv6 Bereich aus
+
+# netstat
+#  Gibt aus, welche Ports von Programmen belegt sind
+#  n = show netwok ip
+#  u = UDP (Protokoll)
+#  t = TCP (Ptorokoll
+#  v = Hersteller
+#  p = Programm
+netstat -nuvp
+
+# lsof (list open files)
+lsof -i :110										# Gibt aus, welche Dokumente eine Verbindung zu IP:Port besitzen. Ähnlich wie netstat.
+
+# blkid
+blkid											# Gibt die UUID, das Label und die Partition-UUID als SUB_UUID von Festplatten aus.
+
+# lsblk
+lsblk											# Gibt eine Herachie aus, auf der jede Partition jeder Festplatte gelistet ist mit ihrem dazugehörigen Mountpoint
+lsblk -p											# Gibt die gleiche Ausgabe wie lsblk, nur mit absoluten Pfaden
+
+# mkfs - Make File System
+mkfs.ext4 /dev/sda1									# Erzeugt auf Partition sda1 ein Dateisystem vom Typ ext4
+mkfs.ext3 /dev/sdb1									# Erzeugt auf Partition sda1 ein Dateisystem vom Typ ext3
+mkfs.reiser /dev/sdc1									# Erzeugt auf Partition sda1 ein Dateisystem vom Typ reiser
+
+# fsck - File System Check
+fsck.ext4	/dev/sda1								# FileSystem Check auf Festplattenpartition (ext4) /dev/sda1
+fsck.ext3	/dev/sdb1								# FileSystem Check auf Festplattenpartition (ext3) /dev/sdb1
+fsck.reiser	/dev/sdc1								# FileSystem Check auf Festplattenpartition (reiser) /dev/sdc1
+touch /forcefsck && reboot 								# FileSystem Check beim nächsten Reboot durchführen
+
+# fdisk
+#  Festplatte Partitionieren
+#  n für neu
+#  w für write
+fdisk /dev/sdb1									# Startet das Partitionsprogramm fdisk um die Partition sdb1 zu partitionieren
+
+# find
+#  find <pfad> <option>
+#   optionen
+#   -type f										# File (Datei)
+#   -type d 										# Directory (Ordner)
+#   -delete 										# Löscht die gefundene Datei, muss als letzter Parameter für effektive Löschung angegeben werden
+#   -name "*.pdf"									# Sucht nach Dokumenten des Typs pdf
+#   ! -name "*.pdf"									# Negation
+#   -not  -name "*.pdf"									# Negation
+#   -empty										# Sucht nach leeren Dateien oder Ordnern
+#   -user markus									# Sucht nach Dateien des Benutzers "markus"
+#   -exec Kommando {} \;								# Wendet auf alle gefundenen Dateien den Shellbefehl "Kommando" an.
+#											#  {} steht dabei als Platzhalter für die gefundenen Dateinamen.
+#   											#  Wenn {} \; verwendet wird, wird für jeden gefunden Pfad das Kommando ausgeführt.
+#  	-exec Kommando {} +	  							#  Wenn {} +  verwendet wird, werden alle Treffer auf einmal dem "Kommando" Programm übergeben.
+#   -execdir Kommando {} \								# Wendet auf alle gefundenen Ordner den Shellbefehl "Kommando" an.
+#   -execdir Kommando {} +
+#   -regextype "posix-extended" 					# Ermöglicht den Zugriff auf erweiterte posix Ausdrücke in einem Regulärem Ausdruck
+#   -regex ".*r([0-9]{0,2}|ar)$"						# Suchen mittels Regulärem Ausdruck nach Dateien mit dem Namen rar - CASE SENSETIVE
+#   -iregex ".*r([0-9]{0,2}|ar)$"						# Suchen mittels Regulärem Ausdruck nach Dateien mit dem Namen rar - CASE INSENSETIVE
+
+# Beispiel für -execdir Kommando {} +
+find ./* -type f -execdir md5sum {} + 				# Bash-Interpretation: 	Erstelle von jedem Verzeichnis eine MD5-Summe. Zusammen: md5sum a b c
+find ./* -type f -execdir md5sum {} ";"				# Bash-Interpretation: 	Erstelle von jedem Verzeichnis eine MD5-Summe. Einzelnd: md5sum a && md5sum b && md5sum c
+find -type f -name "*.mp3" | wc -l					# Listet Anzahl der gefundenen Elemente auf
+
+# Alle PDF Dateien im Aktuellen Verzeichnis und tiefer nach Regulärem Ausdruck umbenennen
+find -type f -name "*.pdf" -exec rename 's/ /_/g' {} \;
+
+# Menüeinträge
+~/.local/share/applications							# Speicherort
+
+# mdadm
+/etc/mdadm/mdadm.conf							# Konfigurationsdatei von mdadm
+sudo mdadm --detail /dev/md0						# Gibt Informationen über das RAID-System md1 aus.
+sudo mdadm --assemble --scan						# Baut RAID-Systeme wieder zusammen unter Angabe der mdadm.conf
+sudo mdadm --stop /dev/md1							# Stoppt das RAID-System md1
+sudo mdadm --add /dev/md1 /dev/sdb1					# Fügt den RAID-System md1 die Festplattenpartition sdb1 hinzu.
+sudo mdadm --remove /dev/md1 /dev/sdb1					# Entfernt aus dem RAID-System md1 die Festplattenpartition sdb1.
+sudo mdadm --monitor --scan --test --oneshot					# E-Mail testen
+
+# SSH
+ssh -o PubkeyAuthentication=no						# SSH Anmelden ohne SSH-Keys
+
+# MySQL
+# MySQL Dump erzeugen
+mysqldump -u <USERNAME> -p -r /path/to/dumpfile.sql --databases <db-name>
+# MySQL Dump einspielen
+mysql -u <username> -p <db-name> < path/to/dumpfile.sql
+
+# systemctl
+systemctl start ssh.service							# Startet den Dienst SSH
+systemctl stop ssh.service							# Stopt den Dienst SSH
+systemctl status ssh.service							# Zeigt den Status vom SSH-Dienst
+systemctl restart ssh.service							# Startet den Dienst SSH neu
+systemctl enable ssh.service							# Aktiviert den SSH Dienst für den Autostart
+systemctl disable ssh.service							# Deaktiviert den SSH Dienst für den Autostart
+systemctl is-enabled foo.service; echo $?					# Gibt den Status des SSH Dienstes als gestartet (0) und gestopt (1) zurück
+
+# apt-key
+gpg --keyserver keys.gnupg.net --recv-keys <key-id>	# PGP-Key von Schlüsselserver abrufen und in gpg-keyring importieren
+gpg -a --export <key-id> | apt-key add -					# PGP-Key exportieren und an apt-key übergeben zum Import
+
+# prosodyctl
+/etc/prosody/prosody.cfg.lua							# Prosody Konfiguration
+prosodyctl adduser <username>@<domain>					# Fügt einen neuen Benutzer der Domain hinzu
+prosodyctl deluser <username>@<domain>					# Entfernt einen bestehenden Benutzer aus einer Domain
+prosodyctl passwd <username>@<domain>					# Setzt das Kennwort eines bestehenden Benutzers aus einer Domain neu
+prosodyctl register <username> <domain> <password>			# Um über Shell-Skripte massenhaft Benutzer zu erstellen
+
+# which
+# Zeigt zu jedem Programm seinen Pfad an
+which bash									# Ausgabe '/bin/bash'
+which gajim									# Ausgabe '/usr/bin/gajim'
+which pidgin									# Ausgabe '/usr/bin/pidgin'
+
+# PDF Komprimieren
+# -dPDFSETTINGS
+#    /screen screen-view-only quality, 72 dpi images
+#    /ebook low quality, 150 dpi images
+#    /printer high quality, 300 dpi images
+#    /prepress high quality, color preserving, 300 dpi imgs
+#    /default almost identical to /screen
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf
+
+# rename
+#  rename 's/<SUCHSTRING>/<ERSETZEN DURCH>/g' <Dateitypen bzw pfade>
+#  \d{} Zwei Zahlen
+rename 's/IMG_(\d{4})(\d{2})(\d{2}).*/$1-$2-$3 - Pauline Sonsorium.jpg/' *.jpg
+
+# NFS - Network File System
+# configs unter /etc/exports
+#  Neu einlesen der Datei exports mit "exportfs -ra"
+# Die exportierten Freigaben können nun per showmount von einem Client abgefragt werden mit "showmount -e <nfs-server>"
+# Optionen
+#  rw = read write
+#  ro = read
+# <Lokales Verzeichnis	<Client(option)>
+/mnt/www				www2(rw,async) www3(rw,async) www4(rw,async) www5(rw,async)
+/mnt/php_sessions		10.1.1.46(rw,async) 10.1.1.47(rw,async) 10.1.1.48(rw,async) 10.1.1.49(rw,async)
+/mnt/ssl				10.1.1.1/24(rw,async)
+
+# tar
+tar -xvf <dateinamen>.tar							# Entpackt das tar-Archiv
+tar -zxvf <dateinamen>.tar							# Entpackt das tar-Archiv ohne Oberverzeichnis
+
+# docker
+docker exec -i -t <container> "/bin/shell"			# Bash Terminal des Docker-Containers starten
+docker logs <container>								# Zeigt die Logdateien auf Stout
+docker cp <container>:/Pfad/container /
+docker ps -a
+
+# docker-compose
+docker-compose up -d <container>					# Fährt den Container herauf
+docker-compose down <container>						# Fährt den Container herunter
+docker-compose rm -f <container>					# Löscht den Container
+docker-compose -d <container.yml>					# Startet den Container als Dienst (d)
+docker-compose -p <container.yml>					# Startet den Container und gibt die Ports frei (p) <localport>:<containerport>
+docker-compose -P <container.yml>					# Startet den Container und gibt alle Ports frei die notwendig sind für den Container
+docker-compose -P <container.yml>					# Startet den Container und mountet ein Volume zwischen localhost und container
+
+# docker-machine
+docker-machine ssh default							# Startet eine SSH Verbindung auf den Container default
+
+# bridge
+auto bri0
+iface bri0 inet static
+address 172.25.32.195
+netmask 255.255.240.0
+gateway 172.25.32.9
+dns-nameservers 172.25.33.30
+bridge_ports enp2s0f0
