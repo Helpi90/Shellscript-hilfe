@@ -1,0 +1,47 @@
+# To implement a for loop:
+for file in *;
+do 
+    echo $file found;
+done
+
+# To implement a case command:
+case "$1"
+in
+    0) echo "zero found";;
+    1) echo "one found";;
+    2) echo "two found";;
+    3*) echo "something beginning with 3 found";;
+esac
+
+# Turn on debugging:
+set -x
+
+# Turn off debugging:
+set +x
+
+# Retrieve N-th piped command exit status
+printf 'foo' | fgrep 'foo' | sed 's/foo/bar/'
+echo ${PIPESTATUS[0]}  # replace 0 with N
+
+# Lock file:
+( set -o noclobber; echo > my.lock ) || echo 'Failed to create lock file'
+
+# Fork bomb
+:(){ :|:& };:
+
+# Unix Roulette
+# (Courtesy of Bigown's answer in the joke thread)
+# DANGER! Don't execute!
+[ $[ $RANDOM % 6 ] == 0 ] && rm -rf /* || echo Click #Roulette
+
+# for loop in one line
+for i in $(seq 1 4); do echo $i; done
+
+# Test if a program exists in the path
+# There are false positives: aliases and functions
+command -v ${program} >/dev/null 2>&1 || error "${program} not installed"
+
+# Redirection
+# Please note that 2>&1 goes after
+my_command > command-stdout-stderr.txt 2>&1
+my_command > /dev/null 2>&1
