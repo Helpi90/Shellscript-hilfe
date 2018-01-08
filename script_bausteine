@@ -1,28 +1,20 @@
 #########################################
 #	Script-Bausteine	#
 #########################################
-##########################################
-## Ueberprüfung ob $1 und $2 gegeben sind
-##########################################
-
+# Überprüfe ob $1 und $2 angegeben ist #
 if [ -z "$1" -o -z "$2" ] ;then
 echo "So geht das nicht"
 exit 1;
 fi
 
-#######################################
-##    Prüfen, ob Host erreichbar
-#######################################
-
+# Prüfen, ob Host erreichbar #
 ping -c 1 192.168.2.$1 &> /dev/null
 if [ "$?" != 0 ] ; then
         echo "Offline" >> /var/log/openhab2/restart.log 2>&1
         exit 1;
 fi
 
-#########################################
-#	Abfrage Name	#
-#########################################
+# Abfrage Name #
 #!/bin/bash
 
 read -p "Ihre Eingabe: " var_name
@@ -61,8 +53,6 @@ else
 		read -p "Ihre Eingabe: " abfrage
 		echo "Die Eingabe lautet: $abfrage"
 	done
-
-
 fi
 
 if [[ -e $abfrage ]]
