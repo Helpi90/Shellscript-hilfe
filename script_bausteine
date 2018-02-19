@@ -1,6 +1,21 @@
+# @Author: macbook
+# @Date:   2017-12-30T15:50:09+01:00
+# @Last modified by:   macbook
+# @Last modified time: 2018-02-11T00:10:05+01:00
+
+
+
+#########################################
+#	Script-Variable	#
+#########################################
+datetime=`date +"%Y-%m-%d.%H:%M:%S"`
+current_date=`date +"%Y-%m-%d"`
+current_time=`date +"%H:%M:%S"`
+
 #########################################
 #	Script-Bausteine	#
 #########################################
+
 # Überprüfe ob $1 und $2 angegeben ist #
 if [ -z "$1" -o -z "$2" ] ;then
 echo "So geht das nicht"
@@ -13,6 +28,27 @@ if [ "$?" != 0 ] ; then
         echo "Offline" >> /var/log/openhab2/restart.log 2>&1
         exit 1;
 fi
+
+# Make sure only root can run our script.
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+# ----------------------------------------------------------------------------
+
+upgrade_setup() {
+	if [ ! -d $APT_DIR ] ; then
+		mkdir $APT_DIR
+		apt-get update
+		touch $APT_DIR/update
+		apt_get -y upgrade
+		touch $APT_DIR/upgrade
+		apt-get -y autoclean
+	else
+		upgrade_update
+		upgrade_upgrade
+		fi
+}
 
 # Abfrage Name #
 #!/bin/bash
