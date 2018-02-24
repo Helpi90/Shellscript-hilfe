@@ -6,6 +6,8 @@ ip -6 r												# Gibt IPv6 Routen aus
 ip -4 n s											# Gibt die nächsten Nachbarn im IPv4 Bereich aus
 ip -6 n s											# Gibt die nächsten Nachbarn im IPv6 Bereich aus
 
+
+#
 # netstat
 #  Gibt aus, welche Ports von Programmen belegt sind
 #  n = show netwok ip
