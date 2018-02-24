@@ -8,6 +8,7 @@ alias gohome="cd ~"
 alias helpi="cd /home/helpi"
 alias pi="cd /home/pi"
 alias cdd="cd - > /dev/null"
+
 #######################################
 ##	GitHub commandos	     ##
 #######################################
