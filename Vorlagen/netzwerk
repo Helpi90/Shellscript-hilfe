@@ -1,0 +1,32 @@
+%include /tmp/networkconfig
+ 
+ 
+%pre --unsupported --interpreter=busybox
+ 
+ 
+CMDLINE_FILE=/tmp/cmdline
+ESXI_INSTALL_LOG=/var/log/esxi_install.log
+ 
+# extract boot options
+vsish -e get /system/bootCmdLine > ${CMDLINE_FILE}
+ 
+# extract and set variables
+HOSTNAME=$(cat ${CMDLINE_FILE} | grep hostname | sed -e 's/.*hostname=\([^ ]*\).*/\1/')
+IPADDR=$(cat ${CMDLINE_FILE} | grep ip | sed -e 's/.*ip=\([^ ]*\).*/\1/')
+NETMASK=$(cat ${CMDLINE_FILE} | grep netmask | sed -e 's/.*netmask=\([^ ]*\).*/\1/')
+GATEWAY=$(cat ${CMDLINE_FILE} | grep gateway | sed -e 's/.*gateway=\([^ ]*\).*/\1/')
+NAMESERVER=$(cat ${CMDLINE_FILE} | grep nameserver | sed -e 's/.*nameserver=\([^ ]*\).*/\1/')
+DC=$(cat ${CMDLINE_FILE} | grep dc | sed -e 's/.*dc=\([^ ]*\).*/\1/')
+
+
+# extract network info from bootup
+VMK_INT="vmk0"
+VMK_LINE=$(localcli network ip interface ipv4 get | grep "${VMK_INT}")
+IPADDR=$(echo "${VMK_LINE}" | awk '{print $2}')
+NETMASK=$(echo "${VMK_LINE}" | awk '{print $3}')
+GATEWAY=$(esxcfg-route | awk '{print $5}')
+DNS="172.30.0.100"
+HOSTNAME=$(nslookup "${IPADDR}" "${DNS}" | grep Address | grep "${IPADDR}" | awk '{print $4}')
+ 
+echo "network --bootproto=static --addvmportgroup=true --device=vmnic0 --ip=${IPADDR} --netmask=${NETMASK} --gateway=${GATEWAY} --nameserver=${DNS} --hostname=${HOSTNAME}" > /tmp/networkconfig
+ 

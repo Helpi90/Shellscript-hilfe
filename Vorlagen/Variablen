@@ -1,8 +1,32 @@
 #Variablen für Shellscripte
 
+# extract network info from bootup
+VMK_INT="vmk0"
+VMK_LINE=$(localcli network ip interface ipv4 get | grep "${VMK_INT}")
+IPADDR=$(echo "${VMK_LINE}" | awk '{print $2}')
+NETMASK=$(echo "${VMK_LINE}" | awk '{print $3}')
+GATEWAY=$(esxcfg-route | awk '{print $5}')
+DNS="172.30.0.100"
+HOSTNAME=$(nslookup "${IPADDR}" "${DNS}" | grep Address | grep "${IPADDR}" | awk '{print $4}')
+ 
+echo "network --bootproto=static --addvmportgroup=true --device=vmnic0 --ip=${IPADDR} --netmask=${NETMASK} --gateway=${GATEWAY} --nameserver=${DNS} --hostname=${HOSTNAME}" > /tmp/networkconfig
+ 
+
 #Datum (Jahr-Monat-Tag)
 
 date=$(date +%F)
+NOW=$(date +'%m.%d.%y at %H:%M:%S')
+
+# Needed to talk to API
+USER="changeme"
+PASS="changeme"
+ 
+API="https://api.github.com"
+ 
+BACKUP_DIR="/data/github_backups"
+TSTAMP=`date "+%Y%m%d-%H%M"`
+ 
+GITCMD="git clone --mirror git@github.com:"
 
 #File Archive Server + Datum
 
@@ -27,6 +51,8 @@ $ echo ${h-$r}	Gibt hoch aus, da die Variable h belegt ist. Ansonsten würde der
 $ echo ${tmp-`date`}	Gibt das aktuelle Datum aus, wenn die Variable tmp nicht gesetzt ist. (Der Befehl date gibt das Datum zurück)
 $ echo ${l=$r}	Gibt runter aus, da die Variable l keinen Wert enthält. Gleichzeitig wird l der Wert von r zugewiesen.
 $ echo $l	Gibt runter aus, da l jetzt den gleichen Inhalt hat wie r.
+
+
 #################################
 ##### Uptime
 #################################
@@ -35,3 +61,19 @@ UP1=$(($UP0/86400))             # Tage
 UP2=$(($UP0/3600%24))           # Stunden
 UP3=$(($UP0/60%60))             # Minuten
 UP4=$(($UP0%60))                # Sekunden
+
+
+chk_root(){
+	local meid=$(id -u)
+	if [ $meid -ne 0 ];
+	then
+		echo "You must be root user to run this tool"
+		exit 999
+	fi
+}
+ 
+write_header(){
+	echo "---------------------------------------------------" >> $OUTPUT
+	echo "$@" >> $OUTPUT
+	echo "---------------------------------------------------"  >> $OUTPUT
+}

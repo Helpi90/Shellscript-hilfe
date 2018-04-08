@@ -15,14 +15,20 @@
 #
 #========================== =======================
 
-echo "Bitte geben Sie ihren Namen ein"
-read name
-
-case "$name" in
-        marc) echo Hallo, Marc
-        ;;
-        Werner) echo Hallo, Werner
-        ;;
-        *) echo "Hallo, Unbekannter!"
-        ;;
-esac
+while [ "$#" -gt 0 ]
+do
+	case $1 in
+	-h | --help)
+		echo "Show program help for $(basename $0)"
+		shift
+		;;
+	-l | --list)
+		echo "List the options"
+		shift
+		;;
+	*)  
+		echo "Other options"
+		shift
+		;;
+	esac
+done
