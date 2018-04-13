@@ -4,6 +4,9 @@
 
 date=$(date +%F)
 
+#Datum Uhrzeit
+date=$(date +'%Y-%m-%d %T.%N') # Ausgabe = 2018-03-08 05:00:46
+
 #File Archive Server + Datum
 
 server="192.168.2.125"
