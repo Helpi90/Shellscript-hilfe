@@ -21,3 +21,15 @@ echo "--------------------------------------"
 # All Parameters ................ [ param1 param2 ]
 # FLAGS ......................... [ hB ]
 # --------------------------------------
+
+#!/bin/sh
+
+_log() {
+    echo "[$(date +'%Y-%m-%d %T')] $1: $2"
+}
+
+info ()    { _log "INFO"    "$*"; }
+error ()   { _log "ERROR"   "$*"; }
+
+info "Das ist ein Test"
+error "Variale lautet ${VAR}"

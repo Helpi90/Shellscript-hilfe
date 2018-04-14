@@ -4,6 +4,15 @@
 #########################################
 #	Abfrage Name	#
 #########################################
+
+# Anzahl an Dateien
+find . -name "/home/helpi" | wc -l | sed 's/\ //g'
+
+# Anzahl an Dateien mit .sh
+find . -name "/home/helpi/*.sh" | wc -l | sed 's/\ //g'
+
+
+
 #!/bin/bash
 
 read -p "Ihre Eingabe: " var_name

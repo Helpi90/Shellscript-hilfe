@@ -1,17 +1,3 @@
-#!/bin/bash
-#======================================== ==================================
-#     FILE:                                bash_template2.sh
-#     AUTHOR:                        macbook
-#     EMAIL:                             helpi9007@gmail.com
-#     CREATED:                      2017-09-13
-#
-#     MODIFIED BY:                macbook
-#     MODIFIED DATE:           2017-09-13
-#
-#     DESCRIPTION:               "Beschreibung"
-#
-#     VERSION:                        1.0
-#======================================== ==================================
 # ---------------------------------------------------------------------------
 # new_script - Bash shell script template generator
 
